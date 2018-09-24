@@ -1,0 +1,118 @@
+---
+question: |
+  Good! You can continue with this interview. 
+  
+  What is your name?
+fields:
+  - Your First Name: user.name.first  
+  - Your Last Name: user.name.last  
+section: Name
+---
+code:
+  plaintiff_name = user.name.first + ' ' + user.name.last
+---
+question: |
+  What is your address?
+fields:
+  - Street Address in Massachusetts: plaintiff_address 
+  - County name: county
+    choices:
+      - Barnstable County
+      - Berkshire County
+      - Bristol County
+      - Dukes County
+      - Essex County
+      - Franklin County
+      - Hampden County
+      - Hampshire County
+      - Middlesex County
+      - Nantucket County
+      - Norfolk County
+      - Plymouth County
+      - Suffolk County
+      - Worcester County
+section: Address
+progress: 20
+---
+question: |
+  Who is your partner's name?
+fields:
+  - Other Party's Name: other_party_name  
+help: |
+  Other Party: The person you raised your child and settled a 
+  custody case with.
+section: OtherParty
+progress: 30
+---
+question: |
+  Tell me about your case.
+fields:  
+  - Case type: user.judgment
+    datatype: checkboxes
+    choices:
+      - Divorce: divorce
+      - Custody: custody
+      - Paternity: paternity
+      - Separate support: separate_support
+  - Case Date: case_date
+    datatype: date  
+  - Custody type: custody_type
+    datatype: radio
+    choices:
+      - Sole: sole
+      - Joint: joint
+      - Physical: physical
+progress: 50
+section: Case Info
+---
+question: |
+  Do you have any children?
+yesno: child.there_are_any
+---
+question: |
+  What is the name of your child?
+fields:
+  - Child name: child.new_item_name
+section: Children
+---
+question: |
+  What is your child ${ i }'s birthdate?
+fields:
+  - Birth date: child[i].birthdate
+    datatype: date    
+progress: 70
+---
+question: |
+  So far, you have told me about your ${ child.as_noun('kid') } 
+  ${ child }.  Do you have another child?
+yesno: child.there_is_another
+progress: 60
+---
+question: |
+  Where do you plan to move?
+fields:
+  - Relocation city: relocation_city
+  - Relocation state: reloc_state  
+    code: states_list()
+  - How to attain a living space: housing_type 
+    datatype: radio
+    choices:
+      - Rent: rent
+      - purchase: purchase
+progress: 80
+section: Relocation
+---
+code: |
+  relocation_state = state_name(reloc_state)
+---
+question: |
+  What about relatives and school condition?
+fields:
+  - Relative types: relative_types
+    hint: e.g., uncle, grandma
+  - School condition: school_condition
+    datatype: radio
+    choices:
+      - Suitable: suitable
+      - Better: better
+progress: 90

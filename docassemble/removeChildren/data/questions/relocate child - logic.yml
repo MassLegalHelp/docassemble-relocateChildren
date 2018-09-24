@@ -1,0 +1,164 @@
+---
+metadata:
+  title: |
+    Remove minor children
+  short title: |
+    Remove minor children
+  description: |
+    Remove Minor Child from the Commonwealth Under G
+  author:
+    - name: Lily 
+      organization: MassLegalHelp.org
+  revision_date: 2018-08-27
+---
+modules:
+  - docassemble.base.core
+---
+include:
+  - relocate child - questions.yml
+---
+initial: True
+code: |
+  if returning_user(minutes=0.5):
+    welcome_back
+---
+code: |
+  menu_items = [ action_menu_item('Roadmap', 'road_map') ]
+  child.object_type = DAObject
+  user.case_type.new(user.judgment.true_values())
+  user.case_type.gathered = True
+---
+objects:
+  - child: DADict
+  - user: Individual
+  - user.case_type: |
+      DADict.using(object_type=Organization,
+                   auto_gather=False,
+                   complete_attribute='complete')
+---
+mandatory: true
+question: |
+  [FILE logo_mlh.gif]
+  
+  Hello! Welcome to the online interview built by MassLegalHelp.org! 
+ 
+  My name is Jane :avitor:, a {virtual assistant}. I am going to ask you some 
+  questions to help you fill out the legal document "Complaint for 
+  Authorization to Remove Minor Child from the Commonwealth 
+  Under G.L. c. 208, § 30". At the end of the interview, you can 
+  download a letter with your answers in it.
+subquestion: |
+  If you are not on a
+  smartphone-sized device,
+  you should see a navigation
+  bar to the left.  
+  
+field: sees_nav_bar
+section: Introduction
+---
+mandatory: True
+code: |
+  if child.there_are_any == True:
+    need(client_done)
+  else:
+    need(client_kicked_out)
+comment: |
+  This is the main flow.  
+---
+event: client_kicked_out
+progress: 100
+question: |
+  Sorry, since you don't have any children, this interview is not for you.
+buttons:
+  - Exit: exit
+  - Restart: restart
+---
+sections:
+  - Introduction
+  - About you:
+    - Name: Your Name
+    - Address: Your Address
+  - Case:
+	  - OtherParty: The Other Party
+	  - Case Info
+  - Children
+  - Relocation
+  - Conclusion
+---
+features:
+  navigation: True
+  progress bar: True
+---
+event: client_done
+question: |
+  You have successfully completed the interview. 
+
+subquestion: |
+  You can user the "Back" button to revise your input, or 
+  just download the letter from this screen and modify it as you see fit. 
+
+  Thank you for using our interview software, and good luck with your case!
+
+attachment:
+  name: A letter for ${ user.name }
+  filename: relocate child
+  docx template file: relocate-child.docx
+
+buttons:
+  - End the Interview: exit
+  - Restart: restart
+progress: 100
+section: Conclusion
+---
+images:
+  avitor: avitor.png
+  mylogo: logo_mlh.gif
+---
+event: welcome_back
+question: |
+  Welcome back!
+subquestion: |
+  You are currently in the
+  **${ nav.get_section(display=True) }**
+  section.
+
+  ${ nav }
+
+  Press "Continue" to pick up
+  where you left off.
+buttons:
+  Continue: continue
+---
+event: road_map
+question: |
+  Roadmap
+subquestion: |
+  You are currently in the
+  **${ nav.get_section(display=True) }**
+  section.
+
+  ${ nav }
+
+  Press "Continue" to resume the
+  interview.
+buttons:
+  Continue: continue
+---
+interview help:
+  label: More info
+  heading: More information about this web site
+  content: |
+    If you are not sure what the right answer is, provide
+    your best guess.
+    
+    You are answering these questions under the pains and
+    penalties of perjury.  Your answers will be 
+    shared with the special prosecutor.
+---
+auto terms:
+  interview: |
+    An online conversation to collect data in order to generate a letter for you.
+---
+terms:
+  virtual assistant: |
+    A character on the screen that assists you to complete this interview.
